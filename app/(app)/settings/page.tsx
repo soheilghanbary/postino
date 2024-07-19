@@ -1,33 +1,33 @@
 import { ModeToggle } from '@/components/mode-toggle';
-import { TextField } from '@/components/text-field';
-import { TextFieldArea } from '@/components/text-field-area';
-import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
-import { UserForm } from '@/components/user-form';
-import { UserUpload } from '@/components/user-upload';
-import { getUserSession } from '@/lib/auth';
+import { ArrowRight, SparklesIcon, UserCog } from 'lucide-react';
+import Link from 'next/link';
 
-export default async function SettingsPage() {
-  const user = await getUserSession();
+export default () => {
   return (
-    <section className="space-y-4">
-      <UserUpload initialPath={user?.image!} />
-      <UserForm />
-      <Card>
-        <CardHeader>
-          <CardTitle>Change Theme</CardTitle>
-        </CardHeader>
-        <CardContent>
+    <div>
+      <header className="border-b p-4">
+        <h1 className="font-bold">Settings</h1>
+      </header>
+      <section className="p-4">
+        <Link
+          href={'/settings/account'}
+          className="flex cursor-pointer items-center justify-between gap-4 rounded-lg p-4 text-muted-foreground duration-150 hover:bg-muted hover:text-foreground"
+        >
+          <UserCog className="size-6" />
+          <span className="flex-1 font-medium">Account Settings</span>
+          <ArrowRight className="size-6" />
+        </Link>
+        <div className="flex cursor-pointer items-center justify-between gap-4 rounded-lg p-4 text-muted-foreground duration-150 hover:bg-muted hover:text-foreground">
+          <UserCog className="size-6" />
+          <span className="flex-1">Account Settings</span>
+          <ArrowRight className="size-6" />
+        </div>
+        <div className="flex cursor-pointer items-center justify-between gap-4 rounded-lg p-4 text-muted-foreground duration-150 hover:bg-muted hover:text-foreground">
+          <SparklesIcon className="size-6" />
+          <span className="flex-1 font-medium">Change Theme</span>
           <ModeToggle />
-        </CardContent>
-      </Card>
-    </section>
+        </div>
+      </section>
+    </div>
   );
-}
+};

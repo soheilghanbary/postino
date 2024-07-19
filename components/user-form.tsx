@@ -1,6 +1,9 @@
 'use client';
+import { updateUser } from '@/actions/user';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useTransition } from 'react';
 import { useForm } from 'react-hook-form';
+import toast from 'react-hot-toast';
 import { z } from 'zod';
 import { TextField } from './text-field';
 import { TextFieldArea } from './text-field-area';
@@ -14,60 +17,57 @@ const formSchema = z.object({
 
 type FormSchema = z.infer<typeof formSchema>;
 
-export function UserForm() {
+export function UserForm(props: FormSchema) {
+  const [pending, mutate] = useTransition();
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<FormSchema>({
-    defaultValues: {
-      name: '',
-      bio: '',
-    },
+    defaultValues: props,
     resolver: zodResolver(formSchema),
   });
 
-  const onSubmit = handleSubmit((data) => console.log(data));
+  const onSubmit = handleSubmit((data) => {
+    mutate(async () => {
+      const res = await updateUser(data);
+      toast.success(res.msg);
+    });
+  });
 
   return (
-    <>
-      <div>
-        <h2 className="font-semibold text-xl">Account Settings</h2>
-        <p className="text-muted-foreground text-xs">
-          Update your Account Details
-        </p>
+    <form onSubmit={onSubmit} className="flex flex-col gap-4">
+      <div className="flex flex-col gap-2">
+        <TextField label="Full Name" {...register('name')} />
+        {errors.name && (
+          <span className="font-medium text-rose-500 text-sm">
+            {errors.name.message}
+          </span>
+        )}
       </div>
-      <form onSubmit={onSubmit} className="flex flex-col gap-4">
-        <div className="flex flex-col gap-2">
-          <TextField label="Full Name" {...register('name')} />
-          {errors.name && (
-            <span className="font-medium text-rose-500 text-sm">
-              {errors.name.message}
-            </span>
-          )}
-        </div>
-        <div className="flex flex-col gap-2">
-          <TextField
-            label="Website"
-            placeholder="example.com"
-            {...register('website')}
-          />
-          {errors.website && (
-            <span className="font-medium text-rose-500 text-sm">
-              {errors.website.message}
-            </span>
-          )}
-        </div>
-        <div className="flex flex-col gap-2">
-          <TextFieldArea label="Bio" {...register('bio')} />
-          {errors.bio && (
-            <span className="font-medium text-rose-500 text-sm">
-              {errors.bio.message}
-            </span>
-          )}
-        </div>
-        <Button className="w-fit">Save</Button>
-      </form>
-    </>
+      <div className="flex flex-col gap-2">
+        <TextField
+          label="Website"
+          placeholder="example.com"
+          {...register('website')}
+        />
+        {errors.website && (
+          <span className="font-medium text-rose-500 text-sm">
+            {errors.website.message}
+          </span>
+        )}
+      </div>
+      <div className="flex flex-col gap-2">
+        <TextFieldArea label="Bio" {...register('bio')} />
+        {errors.bio && (
+          <span className="font-medium text-rose-500 text-sm">
+            {errors.bio.message}
+          </span>
+        )}
+      </div>
+      <Button disabled={pending} className="w-fit">
+        Save
+      </Button>
+    </form>
   );
 }

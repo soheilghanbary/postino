@@ -13,6 +13,8 @@ model User {
   username  String   @default(cuid())
   email     String
   image     String
+  bio       String   @default("")
+  website   String   @default("")
   createdAt DateTime @default(now())
 
   @@index([name])

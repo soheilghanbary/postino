@@ -23,17 +23,8 @@ export function PrimarySidebar() {
         <SidebarLink label="Profile" href="/profile" icon={UserIcon} />
         <SidebarLink label="Settigns" href="/settings" icon={SettingsIcon} />
       </div>
-      <Button
-        variant={'outline'}
-        className="h-12 w-full rounded-full font-semibold"
-      >
-        My Account
-      </Button>
-      <Button
-        variant={'default'}
-        className="h-12 w-full rounded-full font-semibold"
-      >
-        <RocketIcon className="mr-2 size-4" />
+      <Button variant={'default'} className="mt-2 w-full font-semibold">
+        <RocketIcon className="mr-2.5 size-4" />
         New Post
       </Button>
     </aside>
@@ -53,7 +44,7 @@ const SidebarLink = ({ label, href, icon: Icon }: SidebarLinkProps) => {
     <Link
       href={href}
       className={cn(
-        'flex items-center rounded-lg px-4 py-2 font-medium text-lg text-muted-foreground duration-150 hover:text-foreground',
+        'flex items-center rounded-lg px-3 py-1.5 font-medium text-lg text-muted-foreground duration-150 hover:text-foreground',
         { 'bg-muted text-foreground': isActive },
       )}
     >
